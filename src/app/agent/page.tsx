@@ -2,7 +2,7 @@
 
 import { useToken as processToken } from "@/app/actions/token-actions";
 import { FullScreenWidget } from "@/components/ElevenLabsWidget";
-import { AlertCircle, ArrowLeft, Clock, Loader2, Users } from "lucide-react";
+import { AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
@@ -13,13 +13,13 @@ function AgentContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tokenFromUrl, setTokenFromUrl] = useState<string | null>(null);
-  const [tokenInfo, setTokenInfo] = useState<{
-    createdAt: Date;
-    expiresAt: Date;
-    usageCount: number;
-    lastUsedAt?: Date;
-  } | null>(null);
-  const [usageCount, setUsageCount] = useState<number>(0);
+  // const [tokenInfo, setTokenInfo] = useState<{
+  //   createdAt: Date;
+  //   expiresAt: Date;
+  //   usageCount: number;
+  //   lastUsedAt?: Date;
+  // } | null>(null);
+  // const [usageCount, setUsageCount] = useState<number>(0);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -34,8 +34,8 @@ function AgentContent() {
 
         if (result.valid) {
           setIsAuthenticated(true);
-          setTokenInfo(result.tokenInfo || null);
-          setUsageCount("usageCount" in result ? result.usageCount || 0 : 0);
+          // setTokenInfo(result.tokenInfo || null);
+          // setUsageCount("usageCount" in result ? result.usageCount || 0 : 0);
           // Remove token from URL for security
           if (tokenFromUrl) {
             router.replace("/agent", { scroll: false });
@@ -70,22 +70,22 @@ function AgentContent() {
     }
   };
 
-  const formatTimeRemaining = (expiresAt: Date | string) => {
-    const now = new Date();
-    const expiry =
-      typeof expiresAt === "string" ? new Date(expiresAt) : expiresAt;
-    const diff = expiry.getTime() - now.getTime();
+  // const formatTimeRemaining = (expiresAt: Date | string) => {
+  //   const now = new Date();
+  //   const expiry =
+  //     typeof expiresAt === "string" ? new Date(expiresAt) : expiresAt;
+  //   const diff = expiry.getTime() - now.getTime();
 
-    if (diff <= 0) return "Expired";
+  //   if (diff <= 0) return "Expired";
 
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  //   const hours = Math.floor(diff / (1000 * 60 * 60));
+  //   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-    if (hours > 0) {
-      return `${hours}h ${minutes}m remaining`;
-    }
-    return `${minutes}m remaining`;
-  };
+  //   if (hours > 0) {
+  //     return `${hours}h ${minutes}m remaining`;
+  //   }
+  //   return `${minutes}m remaining`;
+  // };
 
   if (isAuthenticated) {
     return (
