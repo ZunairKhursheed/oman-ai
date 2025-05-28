@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, AlertCircle, Loader2, Clock, Users } from "lucide-react";
-import VoiceAgent from "@/components/VoiceAgent";
 import { useToken as processToken } from "@/app/actions/token-actions";
+import { FullScreenWidget } from "@/components/ElevenLabsWidget";
+import { AlertCircle, ArrowLeft, Clock, Loader2, Users } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AgentPage() {
   const [tokenInput, setTokenInput] = useState("");
@@ -85,9 +85,8 @@ export default function AgentPage() {
 
     if (hours > 0) {
       return `${hours}h ${minutes}m remaining`;
-    } else {
-      return `${minutes}m remaining`;
     }
+    return `${minutes}m remaining`;
   };
 
   if (isAuthenticated) {
@@ -150,8 +149,9 @@ export default function AgentPage() {
             )}
 
             {/* Voice Call Interface */}
-            <div className="bg-white rounded-xl shadow-lg h-[calc(100vh-280px)]">
-              <VoiceAgent onTokenExpired={handleTokenExpired} />
+            <div className="bg-white rounded-xl shadow-lg h-[calc(100vh-280px)] flex items-center justify-center">
+              {/* <VoiceAgent onTokenExpired={handleTokenExpired} /> */}
+              <FullScreenWidget agentId={"agent_01jwb1w01nf2n88f5spzfdjwkp"} />
             </div>
           </div>
         </div>
