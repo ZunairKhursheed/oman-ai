@@ -19,56 +19,6 @@ export default function HomePage() {
           </p>
         </header>
 
-        {/* Main Actions */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Create Access Token */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
-              <div className="flex items-center mb-6">
-                <div className="bg-green-500 p-3 rounded-full mr-4">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-900">
-                  Create Access Token
-                </h2>
-              </div>
-              <p className="text-gray-600 mb-6">
-                Generate a secure access token to share with others (valid for
-                24 hours, multiple uses). Each token expires after 24 hours and
-                can be used multiple times.
-              </p>
-              <Link
-                href="/create-token"
-                className="inline-flex items-center px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors"
-              >
-                Generate Token
-              </Link>
-            </div>
-
-            {/* Access Voice Agent */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
-              <div className="flex items-center mb-6">
-                <div className="bg-blue-500 p-3 rounded-full mr-4">
-                  <Users className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-900">
-                  Access Voice Agent
-                </h2>
-              </div>
-              <p className="text-gray-600 mb-6">
-                Have a valid access token? Enter it below to start your
-                conversation with our AI voice assistant.
-              </p>
-              <Link
-                href="/agent"
-                className="inline-flex items-center px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Enter Agent
-              </Link>
-            </div>
-          </div>
-        </div>
-
         {/* Features */}
         <div className="max-w-6xl mx-auto mb-16">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
