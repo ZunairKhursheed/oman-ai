@@ -1,23 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import {
-  AlertCircle,
-  Mic,
-  MicOff,
-  Volume2,
-  VolumeX,
-  Settings,
-  Loader2,
-  Phone,
-  PhoneOff,
-} from "lucide-react";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { AudioPlayer } from "@/utils/audioPlayer";
-
-interface VoiceAgentProps {
-  onTokenExpired?: () => void;
-}
+import {
+  AlertCircle,
+  Loader2,
+  Mic,
+  Phone,
+  PhoneOff,
+  Settings,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Voice {
   voice_id: string;
@@ -27,7 +22,7 @@ interface Voice {
   preview_url?: string;
 }
 
-export default function VoiceAgent({ onTokenExpired }: VoiceAgentProps) {
+export default function VoiceAgent() {
   // State management
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +47,7 @@ export default function VoiceAgent({ onTokenExpired }: VoiceAgentProps) {
     isListening,
     interimTranscript,
     error: speechError,
-    isSupported: isSpeechSupported,
+    isSupported,
     startListening,
     stopListening,
   } = useSpeechRecognition({
@@ -245,6 +240,25 @@ export default function VoiceAgent({ onTokenExpired }: VoiceAgentProps) {
   };
 
   const callState = getCallState();
+
+  // Show browser support warning if speech recognition is not supported
+  if (!isSupported) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-8">
+        <AlertCircle className="text-amber-500 w-12 h-12 mb-4" />
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+          Browser Not Supported
+        </h2>
+        <p className="text-gray-600 text-center mb-4">
+          Your browser does not support the Speech Recognition API needed for
+          voice interaction.
+        </p>
+        <p className="text-gray-600 text-center">
+          Please try using Chrome, Edge, or Safari for the best experience.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 to-blue-50">

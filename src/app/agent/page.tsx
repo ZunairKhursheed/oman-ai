@@ -5,9 +5,9 @@ import { FullScreenWidget } from "@/components/ElevenLabsWidget";
 import { AlertCircle, ArrowLeft, Clock, Loader2, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
-export default function AgentPage() {
+function AgentContent() {
   const [tokenInput, setTokenInput] = useState("");
   const [isValidating, setIsValidating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,52 +24,50 @@ export default function AgentPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const handleTokenValidation = useCallback(
+    async (token: string) => {
+      setIsValidating(true);
+      setError(null);
+
+      try {
+        const result = await processToken(token);
+
+        if (result.valid) {
+          setIsAuthenticated(true);
+          setTokenInfo(result.tokenInfo || null);
+          setUsageCount("usageCount" in result ? result.usageCount || 0 : 0);
+          // Remove token from URL for security
+          if (tokenFromUrl) {
+            router.replace("/agent", { scroll: false });
+          }
+        } else {
+          setError(result.message || "Invalid token");
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Error validating token:", error);
+        setError("An error occurred while validating the token");
+        setIsAuthenticated(false);
+      } finally {
+        setIsValidating(false);
+      }
+    },
+    [router, tokenFromUrl]
+  );
+
   useEffect(() => {
     const urlToken = searchParams.get("token");
     if (urlToken) {
       setTokenFromUrl(urlToken);
       handleTokenValidation(urlToken);
     }
-  }, [searchParams]);
-
-  const handleTokenValidation = async (token: string) => {
-    setIsValidating(true);
-    setError(null);
-
-    try {
-      const result = await processToken(token);
-
-      if (result.valid) {
-        setIsAuthenticated(true);
-        setTokenInfo(result.tokenInfo || null);
-        setUsageCount("usageCount" in result ? result.usageCount || 0 : 0);
-        // Remove token from URL for security
-        if (tokenFromUrl) {
-          router.replace("/agent", { scroll: false });
-        }
-      } else {
-        setError(result.message || "Invalid token");
-        setIsAuthenticated(false);
-      }
-    } catch (error) {
-      console.error("Error validating token:", error);
-      setError("An error occurred while validating the token");
-      setIsAuthenticated(false);
-    } finally {
-      setIsValidating(false);
-    }
-  };
+  }, [searchParams, handleTokenValidation]);
 
   const handleTokenSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (tokenInput.trim()) {
       handleTokenValidation(tokenInput.trim());
     }
-  };
-
-  const handleTokenExpired = () => {
-    setIsAuthenticated(false);
-    setError("Your session has expired. Please use a new token.");
   };
 
   const formatTimeRemaining = (expiresAt: Date | string) => {
@@ -247,5 +245,20 @@ export default function AgentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AgentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          <span className="ml-2 text-gray-600">Loading...</span>
+        </div>
+      }
+    >
+      <AgentContent />
+    </Suspense>
   );
 }

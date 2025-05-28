@@ -1,8 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || "";
 
-export async function GET(request: NextRequest) {
+interface ElevenLabsVoice {
+  voice_id: string;
+  name: string;
+  category: string;
+  labels: Record<string, string>;
+  preview_url: string;
+  settings: {
+    stability: number;
+    similarity_boost: number;
+    [key: string]: unknown;
+  };
+}
+
+export async function GET() {
   try {
     if (!ELEVENLABS_API_KEY) {
       return NextResponse.json(
@@ -31,7 +44,7 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
 
     // Format the voices data
-    const voices = data.voices.map((voice: any) => ({
+    const voices = data.voices.map((voice: ElevenLabsVoice) => ({
       voice_id: voice.voice_id,
       name: voice.name,
       category: voice.category,

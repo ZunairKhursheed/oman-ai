@@ -1,5 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import type { Document, UpdateFilter } from "mongodb";
+import { v4 as uuidv4 } from "uuid";
 import { getDatabase } from "./mongodb";
 
 export interface TokenUsage {
@@ -35,7 +36,7 @@ export async function createAccessToken(): Promise<string> {
   const { token, hashedToken } = await generateAccessToken();
   const db = await getDatabase();
 
-  const expiryHours = parseInt(process.env.TOKEN_EXPIRY_HOURS || "24");
+  const expiryHours = Number.parseInt(process.env.TOKEN_EXPIRY_HOURS || "24");
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + expiryHours);
 
@@ -49,7 +50,10 @@ export async function createAccessToken(): Promise<string> {
     usageCount: 0,
   };
 
-  await db.collection("access_tokens").insertOne(accessToken as any);
+  await db.collection("access_tokens").insertOne({
+    ...accessToken,
+    _id: undefined, // Explicitly set _id to undefined to let MongoDB generate it
+  });
 
   return token;
 }
@@ -106,18 +110,19 @@ export async function recordTokenUsage(
       ipAddress,
     };
 
-    const result = await db.collection("access_tokens").updateOne(
-      { token },
-      {
-        $push: { usageHistory: usage } as any,
-        $set: {
-          lastUsedAt: now,
-          isUsed: true,
-          usedAt: now,
-        },
-        $inc: { usageCount: 1 },
-      }
-    );
+    const updateOperation = {
+      $push: { usageHistory: usage },
+      $set: {
+        lastUsedAt: now,
+        isUsed: true,
+        usedAt: now,
+      },
+      $inc: { usageCount: 1 },
+    } as unknown as UpdateFilter<Document>;
+
+    const result = await db
+      .collection("access_tokens")
+      .updateOne({ token }, updateOperation);
 
     if (result.matchedCount === 0) {
       return { success: false, message: "Token not found" };
@@ -195,9 +200,8 @@ function formatTimeRemaining(milliseconds: number): string {
 
   if (hours > 0) {
     return `${hours}h ${minutes}m`;
-  } else {
-    return `${minutes}m`;
   }
+  return `${minutes}m`;
 }
 
 export async function cleanupExpiredTokens(): Promise<{
