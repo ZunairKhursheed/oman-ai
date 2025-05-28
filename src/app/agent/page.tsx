@@ -89,70 +89,23 @@ function AgentContent() {
 
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-6xl mx-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <Link
-                href="/"
-                className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Home
-              </Link>
-
-              {/* Token Status */}
-              <div className="flex items-center space-x-4">
-                {tokenInfo && (
-                  <>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Users className="w-4 h-4 mr-1" />
-                      <span>Uses: {usageCount}</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Clock className="w-4 h-4 mr-1" />
-                      <span>{formatTimeRemaining(tokenInfo.expiresAt)}</span>
-                    </div>
-                  </>
-                )}
-                <div className="text-sm text-green-600 font-medium">
-                  Session Active
-                </div>
-              </div>
-            </div>
-
-            {/* Token Info Banner */}
-            {tokenInfo && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="text-sm text-blue-800">
-                      <span className="font-medium">Token Status:</span> Active
-                    </div>
-                    <div className="text-sm text-blue-800">
-                      <span className="font-medium">Total Uses:</span>{" "}
-                      {usageCount}
-                    </div>
-                    <div className="text-sm text-blue-800">
-                      <span className="font-medium">Expires:</span>{" "}
-                      {formatTimeRemaining(tokenInfo.expiresAt)}
-                    </div>
-                  </div>
-                  <div className="text-xs text-blue-600">
-                    You can use this token multiple times until it expires
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Voice Call Interface */}
-            <div className="bg-white rounded-xl shadow-lg h-[calc(100vh-280px)] flex items-center justify-center">
-              {/* <VoiceAgent onTokenExpired={handleTokenExpired} /> */}
-              <FullScreenWidget agentId={"agent_01jwb1w01nf2n88f5spzfdjwkp"} />
-            </div>
-          </div>
+      <div className="w-screen h-screen relative bg-white rounded-xl shadow-lg flex items-center justify-center flex-col">
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="129"
+            height="71"
+            viewBox="0 0 129 71"
+            fill="#000000"
+          >
+            <path
+              d="M1.45 53L0.75 49.15L28.26 7.85H6L5.16 14.64L1.66 14.08L2.57 4H33.02L33.72 7.85L6.21 49.15H33.16L34.21 40.4L37.64 40.75L36.59 53H1.45ZM51.5935 53.28C45.3868 53.28 42.0968 50.83 41.7235 45.93C41.6768 45.6033 41.6535 45.2767 41.6535 44.95C41.6535 41.03 44.0102 38.4167 48.7235 37.11C51.3368 36.4567 56.3769 35.71 63.8435 34.87V29.48C63.8435 24.3933 61.1835 21.85 55.8635 21.85C52.0368 21.8967 47.9768 22.7833 43.6835 24.51L42.4935 21.5L43.1935 21.22C46.8335 19.6333 49.6102 18.6767 51.5235 18.35C53.4369 18.0233 54.8369 17.86 55.7235 17.86C56.6102 17.8133 57.4502 17.8133 58.2435 17.86C59.0835 17.9067 60.1569 18.1167 61.4635 18.49C62.7702 18.8633 63.8902 19.4 64.8235 20.1C65.8035 20.7533 66.6435 21.7567 67.3435 23.11C68.0435 24.4633 68.3935 26.0733 68.3935 27.94V49.5H73.7835V53H64.5435L63.8435 50.34C59.6435 52.3 55.5602 53.28 51.5935 53.28ZM52.8535 50.06C56.4002 50.06 60.0635 49.2667 63.8435 47.68V37.67C56.8435 37.9033 52.3168 38.37 50.2635 39.07C48.6768 39.49 47.5568 40.26 46.9035 41.38C46.2502 42.4533 45.9235 43.3167 45.9235 43.97C45.9235 44.6233 45.9235 45.0667 45.9235 45.3C46.0635 46.98 46.7868 48.1933 48.0935 48.94C49.4002 49.6867 50.9868 50.06 52.8535 50.06ZM84.2316 21.5H79.5416V18H88.7816V53C88.7816 53.14 88.7816 53.2567 88.7816 53.35C88.7816 55.2167 88.4316 57.06 87.7316 58.88C87.0782 60.7467 86.2616 62.3333 85.2816 63.64C83.2749 66.3467 81.4316 68.33 79.7516 69.59L78.7016 70.36L76.6016 67.63C81.7349 62.73 84.2782 57.8533 84.2316 53V21.5ZM86.4016 8.62C85.4682 8.62 84.7216 8.34 84.1616 7.78C83.6482 7.17333 83.3916 6.40333 83.3916 5.47C83.3916 4.49 83.6716 3.72 84.2316 3.16C84.7916 2.55333 85.5382 2.25 86.4716 2.25C87.4049 2.25 88.1516 2.55333 88.7116 3.16C89.2716 3.72 89.5516 4.51333 89.5516 5.54C89.5516 6.52 89.2482 7.29 88.6416 7.85C88.0816 8.36333 87.3349 8.62 86.4016 8.62ZM96.1671 21.5V18H105.407V49.5H110.657V53H96.5171V49.5H100.857V21.5H96.1671ZM103.027 8.62C102.094 8.62 101.37 8.34 100.857 7.78C100.344 7.17333 100.087 6.40333 100.087 5.47C100.087 4.49 100.344 3.72 100.857 3.16C101.417 2.55333 102.164 2.25 103.097 2.25C104.03 2.25 104.777 2.55333 105.337 3.16C105.944 3.72 106.247 4.51333 106.247 5.54C106.247 6.52 105.944 7.29 105.337 7.85C104.73 8.36333 103.96 8.62 103.027 8.62ZM114.079 4V0.499996H123.319V49.5H128.569V53H114.429V49.5H118.769V4H114.079Z"
+              fill="#000000"
+            />
+          </svg>
         </div>
+        {/* <VoiceAgent onTokenExpired={handleTokenExpired} /> */}
+        <FullScreenWidget agentId={"agent_01jwb1w01nf2n88f5spzfdjwkp"} />
       </div>
     );
   }
