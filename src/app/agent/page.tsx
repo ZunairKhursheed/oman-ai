@@ -1,9 +1,9 @@
 "use client";
 
 import { useToken as processToken } from "@/app/actions/token-actions";
-import { validateUserSession, logoutUser } from "@/app/actions/session-actions";
+import { validateUserSession } from "@/app/actions/session-actions";
 import { FullScreenWidget } from "@/components/ElevenLabsWidget";
-import { AlertCircle, Loader2, LogOut } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 
