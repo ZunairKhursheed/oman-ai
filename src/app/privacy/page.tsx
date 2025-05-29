@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
                   </p>
                   <ul className="list-disc list-inside space-y-2 ml-4">
                     <li>
-                      <strong>Access Tokens:</strong> Temporary tokens for
+                      <strong>Access Tokens:</strong> Single-use tokens for
                       secure access to the voice agent
                     </li>
                     <li>
@@ -57,6 +57,10 @@ export default function PrivacyPolicyPage() {
                     <li>
                       <strong>Usage Analytics:</strong> Basic usage statistics
                       to improve our service
+                    </li>
+                    <li>
+                      <strong>Session Data:</strong> Temporary session
+                      information stored for 24 hours after token consumption
                     </li>
                   </ul>
                 </div>
@@ -101,8 +105,8 @@ export default function PrivacyPolicyPage() {
                   </p>
                   <ul className="list-disc list-inside space-y-2 ml-4">
                     <li>
-                      <strong>Token-Based Access:</strong> Time-limited tokens
-                      with multiple uses that expire within 24 hours
+                      <strong>Token-Based Access:</strong> Single-use tokens
+                      that create 24-hour sessions for secure access
                     </li>
                     <li>
                       <strong>Local Processing:</strong> Voice recognition
@@ -140,12 +144,10 @@ export default function PrivacyPolicyPage() {
                       Automatic Data Deletion
                     </h3>
                     <ul className="list-disc list-inside space-y-1 text-red-700">
-                      <li>
-                        Access tokens are automatically deleted after 24 hours
-                      </li>
+                      <li>Access tokens are automatically deleted after use</li>
                       <li>Used tokens are immediately marked as invalid</li>
                       <li>
-                        Session data is cleared when you close the application
+                        Session data is cleared when sessions expire (24 hours)
                       </li>
                       <li>Conversation history is not permanently stored</li>
                     </ul>

@@ -89,14 +89,9 @@ export default function TermsPage() {
                       Token Validity
                     </h3>
                     <ul className="list-disc list-inside space-y-1 text-blue-700">
-                      <li>
-                        Each access token is valid for 24 hours from creation
-                      </li>
-                      <li>
-                        Tokens can be used multiple times within their 24-hour
-                        validity period
-                      </li>
-                      <li>Used or expired tokens cannot be reactivated</li>
+                      <li>Each access token is valid for single-use only</li>
+                      <li>Tokens create a 24-hour session when consumed</li>
+                      <li>Used tokens cannot be reused or reactivated</li>
                       <li>
                         You are responsible for keeping your tokens secure
                       </li>

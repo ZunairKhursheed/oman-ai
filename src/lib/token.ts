@@ -83,6 +83,11 @@ export async function validateToken(token: string): Promise<{
     return { valid: false, message: "Token has expired" };
   }
 
+  // Check if token has already been used (single-use only)
+  if (tokenDoc.isUsed) {
+    return { valid: false, message: "Token has already been used" };
+  }
+
   return {
     valid: true,
     message: "Token is valid",
@@ -104,17 +109,29 @@ export async function recordTokenUsage(
     const db = await getDatabase();
     const now = new Date();
 
+    // First check if token is already used
+    const tokenDoc = await db.collection("access_tokens").findOne({ token });
+
+    if (!tokenDoc) {
+      return { success: false, message: "Token not found" };
+    }
+
+    if (tokenDoc.isUsed) {
+      return { success: false, message: "Token has already been used" };
+    }
+
     const usage: TokenUsage = {
       usedAt: now,
       userAgent,
       ipAddress,
     };
 
+    // Mark token as used (single-use only)
     const updateOperation = {
       $push: { usageHistory: usage },
       $set: {
         lastUsedAt: now,
-        isUsed: true,
+        isUsed: true, // Mark as used - no further uses allowed
         usedAt: now,
       },
       $inc: { usageCount: 1 },
@@ -128,14 +145,10 @@ export async function recordTokenUsage(
       return { success: false, message: "Token not found" };
     }
 
-    const updatedToken = await db
-      .collection("access_tokens")
-      .findOne({ token });
-
     return {
       success: true,
-      message: "Token usage recorded",
-      usageCount: updatedToken?.usageCount || 0,
+      message: "Token consumed successfully",
+      usageCount: 1, // Always 1 since it's single-use
     };
   } catch (error) {
     console.error("Error recording token usage:", error);

@@ -77,8 +77,8 @@ export default function CreateTokenPage() {
               Create Access Token
             </h1>
             <p className="text-lg text-gray-600">
-              Generate a secure access token for the Voice Agent (valid for 24
-              hours, multiple uses)
+              Generate a secure access token for the Voice Agent (single-use
+              only, creates 24-hour session)
             </p>
           </div>
 
@@ -95,10 +95,10 @@ export default function CreateTokenPage() {
                       <Clock className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
                       <div>
                         <p className="font-medium text-gray-900">
-                          24-Hour Expiry
+                          Single-Use Only
                         </p>
                         <p className="text-sm text-gray-600">
-                          Token automatically expires after 24 hours
+                          Token can only be used once to create a session
                         </p>
                       </div>
                     </div>
@@ -106,10 +106,10 @@ export default function CreateTokenPage() {
                       <Shield className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
                       <div>
                         <p className="font-medium text-gray-900">
-                          Multiple Uses
+                          24-Hour Session
                         </p>
                         <p className="text-sm text-gray-600">
-                          Token can be used multiple times within 24 hours
+                          Creates a 24-hour session after token consumption
                         </p>
                       </div>
                     </div>
@@ -231,8 +231,8 @@ export default function CreateTokenPage() {
                   <p className="text-sm text-yellow-800">
                     <strong>Important:</strong> Save this token and URL now.
                     Once you leave this page, you won&apos;t be able to retrieve
-                    them again. The token will expire in 24 hours and can be
-                    used multiple times within that period.
+                    them again. The token is single-use only and will create a
+                    24-hour session when used.
                   </p>
                 </div>
               </div>

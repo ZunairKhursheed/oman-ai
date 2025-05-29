@@ -7,7 +7,8 @@ import {
   getTokenUsageStats,
   cleanupExpiredTokens,
 } from "@/lib/token";
-import { headers } from "next/headers";
+import { createSession } from "@/lib/session";
+import { headers, cookies } from "next/headers";
 
 export async function generateNewToken() {
   try {
@@ -20,7 +21,7 @@ export async function generateNewToken() {
       token,
       shareUrl,
       message:
-        "Token generated successfully. Valid for 24 hours with unlimited uses.",
+        "Token generated successfully. Single-use only - creates 24-hour session when used.",
     };
   } catch (error) {
     console.error("Error generating token:", error);
@@ -60,7 +61,7 @@ export async function useToken(token: string) {
     const realIp = headersList.get("x-real-ip");
     const ipAddress = forwardedFor || realIp || undefined;
 
-    // Record the token usage (multiple uses allowed)
+    // Record the token usage (this will mark it as used)
     const usageResult = await recordTokenUsage(token, userAgent, ipAddress);
 
     if (!usageResult.success) {
@@ -70,10 +71,23 @@ export async function useToken(token: string) {
       };
     }
 
+    // Create a new session for the user
+    const sessionId = await createSession(token, userAgent, ipAddress);
+
+    // Set session cookie
+    const cookieStore = await cookies();
+    cookieStore.set("session_id", sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60, // 24 hours
+      path: "/",
+    });
+
     return {
       valid: true,
-      message: `Token validated successfully. Usage count: ${usageResult.usageCount}`,
-      usageCount: usageResult.usageCount,
+      message: "Token consumed successfully. Session created for 24 hours.",
+      sessionId,
       tokenInfo: validation.tokenInfo,
     };
   } catch (error) {
