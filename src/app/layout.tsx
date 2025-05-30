@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Voice Agent - AI Assistant",
-  description: "Intelligent voice assistant powered by AI and ElevenLabs",
+  title: "Zajil - AI Assistant",
+  description: "official Oman goverment AI Assistant",
   other: {
     "facebook-domain-verification": "fjxyhgph7w6ld6oe3okwp9woeqsuqw",
   },
